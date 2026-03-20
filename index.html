@@ -173,7 +173,7 @@ canvas{position:fixed;inset:0;z-index:0;opacity:.12}
       </div>
       <div class="field">
         <label>// 座駕型號</label>
-        <input type="text" id="inp-car" placeholder maxlength="50">
+        <input type="text" id="inp-car" placeholder="輸入座駕型號..." maxlength="50">
       </div>
       <div class="err" id="form-err">請填寫所有欄位</div>
       <button class="submit-btn" id="submit-btn" onclick="submitReg()">
@@ -330,7 +330,7 @@ function openRegister(){
 
 // ── Submit to Google Sheets via Apps Script ──
 // PASTE YOUR GOOGLE APPS SCRIPT URL BELOW (see instructions after this file)
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwNYoJef9h3ddCQpwDaHpZP3stOH-TxabMzV2qcUJQ/dev';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwNYoJef9h3ddCQpwDaHpZP3stOH-TxabMzV2qcUJQ/exec';
 
 async function submitReg(){
   const name=document.getElementById('inp-name').value.trim();
