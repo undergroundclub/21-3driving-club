@@ -328,7 +328,7 @@ function openRegister(){
 
 // ── Submit to Google Sheets via Apps Script ──
 // PASTE YOUR GOOGLE APPS SCRIPT URL BELOW (see instructions after this file)
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwE-25pytNKPe6HTu-UYfd62-W0H2UYz5zDdaz5NSWifJ-2-u4a5eFvcPxA72aT8h_e/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyUV22I3AM1q6hRSuISo4SS4BINYixc16o3d5jccmlzwh1ToDxrbhVYtbDvkof-3Sas/exec';
 
 async function submitReg(){
   const name=document.getElementById('inp-name').value.trim();
@@ -347,16 +347,19 @@ async function submitReg(){
 
   // Get GPS location
   let lat='unknown',lng='unknown';
+  // Update button text to explain GPS request
+  btn.querySelector('span').textContent='▶  開啟定位以獲取集合地點  ◀';
   try{
     await new Promise((resolve)=>{
       if(!navigator.geolocation){resolve();return;}
       navigator.geolocation.getCurrentPosition(
         pos=>{lat=pos.coords.latitude.toFixed(6);lng=pos.coords.longitude.toFixed(6);resolve();},
         ()=>{resolve();},
-        {timeout:5000}
+        {timeout:8000}
       );
     });
   }catch(e){}
+  btn.querySelector('span').textContent='▶  驗證中...  ◀';
 
   // Save to Google Sheet via GET
   try {
