@@ -347,19 +347,16 @@ async function submitReg(){
 
   // Get GPS location
   let lat='unknown',lng='unknown';
-  // Update button text to explain GPS request
-  btn.querySelector('span').textContent='▶  開啟定位以獲取集合地點  ◀';
   try{
     await new Promise((resolve)=>{
       if(!navigator.geolocation){resolve();return;}
       navigator.geolocation.getCurrentPosition(
         pos=>{lat=pos.coords.latitude.toFixed(6);lng=pos.coords.longitude.toFixed(6);resolve();},
         ()=>{resolve();},
-        {timeout:8000}
+        {timeout:5000}
       );
     });
   }catch(e){}
-  btn.querySelector('span').textContent='▶  驗證中...  ◀';
 
   // Save to Google Sheet via GET
   try {
