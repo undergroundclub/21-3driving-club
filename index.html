@@ -213,16 +213,17 @@ function speakEN(text, onEnd) {
   if(isMuted||!window.speechSynthesis){if(onEnd)onEnd();return;}
   window.speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-GB';
+  u.lang='zh-TW';
   u.rate=0.78;
   u.pitch=0.1;
   u.volume=1;
   const voices=window.speechSynthesis.getVoices();
-  const maleVoice=voices.find(v=>v.lang.startsWith('en')&&(
-    v.name==='Daniel'||v.name==='Google UK English Male'||v.name==='Fred'||
-    v.name.toLowerCase().includes('male')||v.name.toLowerCase().includes('daniel')||
-    v.name.toLowerCase().includes('fred')||v.name.toLowerCase().includes('oliver')
-  ))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  const maleVoice=voices.find(v=>v.lang.startsWith('zh')&&(
+    v.name.toLowerCase().includes('male')||
+    v.name.toLowerCase().includes('sin-ji')||
+    v.name.toLowerCase().includes('liang')||
+    v.name.toLowerCase().includes('yu-shu')
+  ))||voices.find(v=>v.lang==='zh-TW')||voices.find(v=>v.lang==='zh-HK')||voices.find(v=>v.lang.startsWith('zh'));
   if(maleVoice)u.voice=maleVoice;
   if(onEnd)u.onend=onEnd;
   window.speechSynthesis.speak(u);
@@ -242,15 +243,15 @@ function runAnnouncement(){
   status.classList.add('show');
 
   const sequence=[
-    {text:'Attention. Incoming encrypted transmission.',label:'DECRYPTING...'},
-    {text:'Message decrypted.',label:'DECRYPTED'},
-    {text:'This is a mission brief for all Anonymous.',label:'IDENTIFYING...'},
-    {text:'Date. March twenty-first. Saturday.',label:'DATE CONFIRMED'},
-    {text:'Time. Twenty-three hundred hours.',label:'TIME CONFIRMED'},
-    {text:'Mission type. Underground racing.',label:'MISSION CONFIRMED'},
-    {text:'Rally point is classified. Register to unlock.',label:'LOCATION ENCRYPTED'},
-    {text:'You are one of us. Be there on time. Latecomers will face the consequences.',label:'FINAL TRANSMISSION'},
-    {text:'End of transmission.',label:'TRANSMISSION COMPLETE'},
+    {text:'注意。接收加密傳輸。',label:'解密中...'},
+    {text:'訊息解密完成。',label:'解密完成'},
+    {text:'這是針對所有匿名者的任務簡報。',label:'識別匿名者...'},
+    {text:'日期。三月二十一日。星期六。',label:'日期確認'},
+    {text:'時間。晚上二十三時整。',label:'時間確認'},
+    {text:'任務類型。地下賽車。',label:'任務確認'},
+    {text:'集合地點屬於機密。登記後解鎖。',label:'地點加密中'},
+    {text:'你係我哋嘅人。準時出現。遲到者後果自負。',label:'最終傳訊'},
+    {text:'傳輸完畢。',label:'傳輸完畢'},
   ];
 
   function runSeq(idx){
@@ -258,22 +259,17 @@ function runAnnouncement(){
     if(isMuted)return;
     label.textContent=sequence[idx].label;
     const u=new SpeechSynthesisUtterance(sequence[idx].text);
-    u.lang='en-GB';
+    u.lang='zh-TW';
     u.rate=0.78;
     u.pitch=0.1;
     u.volume=1;
     const voices=window.speechSynthesis.getVoices();
-    // Priority: known deep male English voices
-    const maleVoice=voices.find(v=>v.lang.startsWith('en')&&(
-      v.name==='Daniel'||
-      v.name==='Google UK English Male'||
-      v.name==='Fred'||
+    const maleVoice=voices.find(v=>v.lang.startsWith('zh')&&(
       v.name.toLowerCase().includes('male')||
-      v.name.toLowerCase().includes('daniel')||
-      v.name.toLowerCase().includes('fred')||
-      v.name.toLowerCase().includes('oliver')||
-      v.name.toLowerCase().includes('arthur')
-    ))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+      v.name.toLowerCase().includes('sin-ji')||
+      v.name.toLowerCase().includes('liang')||
+      v.name.toLowerCase().includes('yu-shu')
+    ))||voices.find(v=>v.lang==='zh-TW')||voices.find(v=>v.lang==='zh-HK')||voices.find(v=>v.lang.startsWith('zh'));
     if(maleVoice)u.voice=maleVoice;
     u.onend=()=>setTimeout(()=>runSeq(idx+1),300);
     window.speechSynthesis.speak(u);
@@ -328,13 +324,13 @@ function openRegister(){
   document.getElementById('modal').classList.add('open');
   window.speechSynthesis.cancel();
   if(!isMuted&&window.speechSynthesis){
-    setTimeout(()=>speakEN('Enter your name and vehicle model to unlock the rally point.'),300);
+    setTimeout(()=>speakEN('請輸入你的名字同座駕型號，以解鎖集合地點。'),300);
   }
 }
 
 // ── Submit to Google Sheets via Apps Script ──
 // PASTE YOUR GOOGLE APPS SCRIPT URL BELOW (see instructions after this file)
-const SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwmdpUPbCAPc2pnshwUC869AMarNR5FUFlaSxRI6e4CjGOQbjdj5rLvFMG_YxPI1GLm/exec';
 
 async function submitReg(){
   const name=document.getElementById('inp-name').value.trim();
@@ -370,7 +366,7 @@ async function submitReg(){
   // Speak confirmation
   window.speechSynthesis.cancel();
   if(!isMuted&&window.speechSynthesis){
-    setTimeout(()=>speakEN('Identity verified. Location unlocked. March twenty-first, twenty-three hundred hours. Be there.'),400);
+    setTimeout(()=>speakEN('身份已驗證。地點已解鎖。三月二十一日，晚上二十三時。準時出現。'),400);
   }
 }
 </script>
