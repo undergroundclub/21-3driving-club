@@ -213,17 +213,16 @@ function speakEN(text, onEnd) {
   if(isMuted||!window.speechSynthesis){if(onEnd)onEnd();return;}
   window.speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang='zh-TW';
+  u.lang='zh-HK';
   u.rate=0.78;
   u.pitch=0.1;
   u.volume=1;
   const voices=window.speechSynthesis.getVoices();
-  const maleVoice=voices.find(v=>v.lang.startsWith('zh')&&(
+  const maleVoice=voices.find(v=>v.lang==='zh-HK'&&(
     v.name.toLowerCase().includes('male')||
     v.name.toLowerCase().includes('sin-ji')||
-    v.name.toLowerCase().includes('liang')||
-    v.name.toLowerCase().includes('yu-shu')
-  ))||voices.find(v=>v.lang==='zh-TW')||voices.find(v=>v.lang==='zh-HK')||voices.find(v=>v.lang.startsWith('zh'));
+    v.name.toLowerCase().includes('sinji')
+  ))||voices.find(v=>v.lang==='zh-HK')||voices.find(v=>v.lang==='zh-TW')||voices.find(v=>v.lang.startsWith('zh'));
   if(maleVoice)u.voice=maleVoice;
   if(onEnd)u.onend=onEnd;
   window.speechSynthesis.speak(u);
@@ -259,17 +258,16 @@ function runAnnouncement(){
     if(isMuted)return;
     label.textContent=sequence[idx].label;
     const u=new SpeechSynthesisUtterance(sequence[idx].text);
-    u.lang='zh-TW';
+    u.lang='zh-HK';
     u.rate=0.78;
     u.pitch=0.1;
     u.volume=1;
     const voices=window.speechSynthesis.getVoices();
-    const maleVoice=voices.find(v=>v.lang.startsWith('zh')&&(
+    const maleVoice=voices.find(v=>v.lang==='zh-HK'&&(
       v.name.toLowerCase().includes('male')||
       v.name.toLowerCase().includes('sin-ji')||
-      v.name.toLowerCase().includes('liang')||
-      v.name.toLowerCase().includes('yu-shu')
-    ))||voices.find(v=>v.lang==='zh-TW')||voices.find(v=>v.lang==='zh-HK')||voices.find(v=>v.lang.startsWith('zh'));
+      v.name.toLowerCase().includes('sinji')
+    ))||voices.find(v=>v.lang==='zh-HK')||voices.find(v=>v.lang==='zh-TW')||voices.find(v=>v.lang.startsWith('zh'));
     if(maleVoice)u.voice=maleVoice;
     u.onend=()=>setTimeout(()=>runSeq(idx+1),300);
     window.speechSynthesis.speak(u);
@@ -348,14 +346,11 @@ async function submitReg(){
     if(SHEET_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
       const time=new Date().toLocaleString('zh-HK',{timeZone:'Asia/Hong_Kong'});
       const url=SHEET_URL+'?name='+encodeURIComponent(name)+'&car='+encodeURIComponent(car)+'&time='+encodeURIComponent(time);
-      // Method 1: fetch (most reliable)
-      fetch(url, {method:'GET', mode:'no-cors'}).catch(()=>{
-        // Method 2: image fallback
-        const img=new Image();
-        img.src=url;
+      fetch(url,{method:'GET',mode:'no-cors'}).catch(()=>{
+        const img=new Image();img.src=url;
       });
     }
-  } catch(e){ /* silent fail */ }
+  } catch(e){ console.log('Sheet error:',e); }
 
   // Reveal location
   document.getElementById('form-section').style.display='none';
