@@ -343,13 +343,17 @@ async function submitReg(){
   btn.disabled=true;
   btn.querySelector('span').textContent='▶  驗證中...  ◀';
 
-  // Save to Google Sheet via GET (bypasses CORS completely)
+  // Save to Google Sheet via GET
   try {
     if(SHEET_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
       const time=new Date().toLocaleString('zh-HK',{timeZone:'Asia/Hong_Kong'});
       const url=SHEET_URL+'?name='+encodeURIComponent(name)+'&car='+encodeURIComponent(car)+'&time='+encodeURIComponent(time);
-      const img=new Image();
-      img.src=url;
+      // Method 1: fetch (most reliable)
+      fetch(url, {method:'GET', mode:'no-cors'}).catch(()=>{
+        // Method 2: image fallback
+        const img=new Image();
+        img.src=url;
+      });
     }
   } catch(e){ /* silent fail */ }
 
