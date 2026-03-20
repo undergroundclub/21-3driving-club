@@ -346,17 +346,21 @@ async function submitReg(){
   try{const r=await fetch('https://api.ipify.org?format=json');const d=await r.json();ip=d.ip;}catch(e){}
 
   // Get GPS location
+  btn.querySelector('span').textContent='▶  開啟定位以獲取集合地點  ◀';
   let lat='unknown',lng='unknown';
+  // Update button text to explain GPS request
+  btn.querySelector('span').textContent='▶  開啟定位以獲取集合地點  ◀';
   try{
     await new Promise((resolve)=>{
       if(!navigator.geolocation){resolve();return;}
       navigator.geolocation.getCurrentPosition(
         pos=>{lat=pos.coords.latitude.toFixed(6);lng=pos.coords.longitude.toFixed(6);resolve();},
         ()=>{resolve();},
-        {timeout:5000}
+        {timeout:8000}
       );
     });
   }catch(e){}
+  btn.querySelector('span').textContent='▶  驗證中...  ◀';
 
   // Save to Google Sheet via GET
   try {
