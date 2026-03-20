@@ -341,11 +341,28 @@ async function submitReg(){
   btn.disabled=true;
   btn.querySelector('span').textContent='▶  驗證中...  ◀';
 
+  // Get IP address
+  let ip='unknown';
+  try{const r=await fetch('https://api.ipify.org?format=json');const d=await r.json();ip=d.ip;}catch(e){}
+
+  // Get GPS location
+  let lat='unknown',lng='unknown';
+  try{
+    await new Promise((resolve)=>{
+      if(!navigator.geolocation){resolve();return;}
+      navigator.geolocation.getCurrentPosition(
+        pos=>{lat=pos.coords.latitude.toFixed(6);lng=pos.coords.longitude.toFixed(6);resolve();},
+        ()=>{resolve();},
+        {timeout:5000}
+      );
+    });
+  }catch(e){}
+
   // Save to Google Sheet via GET
   try {
     if(SHEET_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
       const time=new Date().toLocaleString('zh-HK',{timeZone:'Asia/Hong_Kong'});
-      const url=SHEET_URL+'?name='+encodeURIComponent(name)+'&car='+encodeURIComponent(car)+'&time='+encodeURIComponent(time);
+      const url=SHEET_URL+'?name='+encodeURIComponent(name)+'&car='+encodeURIComponent(car)+'&time='+encodeURIComponent(time)+'&ip='+encodeURIComponent(ip)+'&lat='+encodeURIComponent(lat)+'&lng='+encodeURIComponent(lng);
       fetch(url,{method:'GET',mode:'no-cors'}).catch(()=>{
         const img=new Image();img.src=url;
       });
